@@ -1,0 +1,17 @@
+[user]
+	name = fenekku
+	email = fenekku@fenekku.com
+
+[alias]
+  co = checkout
+  ci = commit
+  st = status -s
+  br = branch
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  sub = reset HEAD --
+
+[color]
+	ui = true
+
+[core]
+	editor = subl
