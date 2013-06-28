@@ -108,5 +108,14 @@ if [ -f ~/.bash_apps ]; then
     . ~/.bash_apps
 fi
 
-export EDITOR=subl
+export EDITOR=diakonos
 
+#VirtualEnvWrapper
+#-----------------
+# where you keep all your virtual environments
+export WORKON_HOME=$HOME/.virtualenvs
+# where you will place your projects (optional)
+export PROJECT_HOME=$HOME
+source /usr/local/bin/virtualenvwrapper.sh
+
+alias homeshick="$HOME/.homesick/repos/homeshick/home/.homeshick"
