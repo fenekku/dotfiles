@@ -1,6 +1,4 @@
 
-alias homeshick="$HOME/.homesick/repos/homeshick/home/.homeshick"
-
 set -x PATH $PATH ~/.babel/bin
 
 set -g VIRTUALFISH_COMPAT_ALIASES
