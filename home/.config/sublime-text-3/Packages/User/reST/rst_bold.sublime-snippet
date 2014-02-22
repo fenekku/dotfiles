@@ -1,0 +1,6 @@
+<snippet>
+    <content><![CDATA[**$SELECTION**]]></content>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>text.restructuredtext</scope>
+    <description>reST: bold</description>
+</snippet>
