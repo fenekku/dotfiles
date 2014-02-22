@@ -1,5 +1,5 @@
 [
-    { "keys": ["ctrl+b"], "command":"insert_snippet", "args":{"name": "prev_viewackages/User/Snippets/rst_bold.sublime-snippet"}, "context":
+    { "keys": ["ctrl+b"], "command":"insert_snippet", "args":{"name": "Packages/User/Snippets/rst_bold.sublime-snippet"}, "context":
         [
             { "key": "selector", "operator": "equal", "operand": "text.restructuredtext" },
             { "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
