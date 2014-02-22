@@ -1,0 +1,20 @@
+[
+    { "keys": ["ctrl+b"], "command":"insert_snippet", "args":{"name": "Packages/User/Snippets/rst_bold.sublime-snippet"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "text.restructuredtext" },
+            { "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+        ]
+    },
+    { "keys": ["ctrl+i"], "command":"insert_snippet", "args":{"name": "Packages/User/Snippets/rst_italics.sublime-snippet"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "text.restructuredtext" },
+            { "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+        ]
+    },
+    { "keys": ["ctrl+u"], "command":"insert_snippet", "args":{"name": "Packages/User/Snippets/rst_h2.sublime-snippet"}, "context":
+        [
+            { "key": "selector", "operator": "equal", "operand": "text.restructuredtext" },
+            { "key": "selection_empty", "operator": "equal", "operand": false, "match_all": true }
+        ]
+    }
+]
