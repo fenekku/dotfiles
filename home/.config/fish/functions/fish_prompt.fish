@@ -14,9 +14,9 @@ function fish_prompt --description 'Write out the prompt'
 	end
 
 	if set -q VIRTUAL_ENV
-		if not set -q __fish_prompt_virtualenv
-			set -g __fish_prompt_virtualenv "$__fish_prompt_virtualenv_color""("(basename "$VIRTUAL_ENV")")"$__fish_prompt_normal" "
-		end
+		set -g __fish_prompt_virtualenv "$__fish_prompt_virtualenv_color""("(basename "$VIRTUAL_ENV")")"$__fish_prompt_normal" "
+    else
+        set -g __fish_prompt_virtualenv  ""
 	end
 
 	if not set -q __fish_prompt_git_color
