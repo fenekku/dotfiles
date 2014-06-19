@@ -108,7 +108,7 @@ if [ -f ~/.bash_apps ]; then
     . ~/.bash_apps
 fi
 
-export EDITOR=diakonos
+export EDITOR=subl
 
 #VirtualEnvWrapper
 #-----------------
@@ -118,4 +118,4 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME
 source /usr/local/bin/virtualenvwrapper.sh
 
-alias homeshick="$HOME/.homesick/repos/homeshick/home/.homeshick"
+source $HOME/.homesick/repos/homeshick/homeshick.sh
