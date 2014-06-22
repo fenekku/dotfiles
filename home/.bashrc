@@ -119,3 +119,6 @@ export PROJECT_HOME=$HOME
 source /usr/local/bin/virtualenvwrapper.sh
 
 source $HOME/.homesick/repos/homeshick/homeshick.sh
+
+#rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
