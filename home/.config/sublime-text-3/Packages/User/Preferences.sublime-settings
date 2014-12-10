@@ -1,5 +1,6 @@
 {
 	"auto_find_in_selection": true,
+	"dictionary": "Packages/Language - French - Français/fr_FR (modern).dic",
 	"draw_white_space": "all",
 	"find_selected_text": true,
 	"folder_exclude_patterns":
@@ -28,8 +29,7 @@
 		79
 	],
 	"show_minimap": false,
-	"translate_tabs_to_spaces": true,
-	"trim_trailing_white_space_on_save": true,
 	"spell_check": true,
-	"dictionary": "Packages/Language - English/en_CA.dic"
+	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true
 }
