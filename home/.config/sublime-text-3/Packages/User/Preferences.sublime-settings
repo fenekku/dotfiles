@@ -21,7 +21,8 @@
 	"font_size": 13,
 	"ignored_packages":
 	[
-		"Vintage"
+		"Vintage",
+		"Markdown"
 	],
 	"rulers":
 	[
@@ -31,5 +32,6 @@
 	"show_minimap": false,
 	"spell_check": true,
 	"translate_tabs_to_spaces": true,
-	"trim_trailing_white_space_on_save": true
+	"trim_trailing_white_space_on_save": true,
+	"default_encoding": "UTF-8"
 }
