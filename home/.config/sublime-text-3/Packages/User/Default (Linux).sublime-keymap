@@ -1,5 +1,5 @@
 [
-	{ "keys": ["ctrl+shift+g"], "command": "find_all_under" },
+	{ "keys": ["ctrl+shift+r"], "command": "find_all_under" },
 	{ "keys": ["ctrl+d"], "command": "run_macro_file", "args": {"file": "Packages/Default/Delete Line.sublime-macro"} },
 	{ "keys": ["ctrl+tab"], "command": "next_view" },
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
