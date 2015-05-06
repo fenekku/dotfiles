@@ -5,9 +5,10 @@ set PATH ~/.rbenv/bin $PATH
 
 set -g VIRTUALFISH_COMPAT_ALIASES
 
-. (rbenv init -|psub)
-
-alias betty="~/dev/ruby-dev/betty/main.rb"
+if type rbenv > /dev/null
+    . (rbenv init -|psub)
+    alias betty="~/dev/ruby-dev/betty/main.rb"
+end
 
 . $HOME/.config/fish/functions/fish_prompt.fish
 . $HOME/.config/fish/functions/ll.fish
