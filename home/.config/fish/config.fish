@@ -1,5 +1,8 @@
 
+#reverse order of precedence
 set PATH ~/.nimble/bin $PATH
+#nim path
+set PATH ~/dev/nim-dev/nim/bin $PATH
 set PATH ~/usr/local $PATH
 set PATH ~/.rbenv/bin $PATH
 
