@@ -1,5 +1,11 @@
 {
+	"added_words":
+	[
+		"impactful",
+		"unsatiated"
+	],
 	"auto_find_in_selection": true,
+	"default_encoding": "UTF-8",
 	"dictionary": "Packages/Language - English/en_CA.dic",
 	"draw_white_space": "all",
 	"find_selected_text": true,
@@ -21,8 +27,7 @@
 	"font_size": 13,
 	"ignored_packages":
 	[
-		"Vintage",
-		"Markdown"
+		"Vintage"
 	],
 	"rulers":
 	[
@@ -32,6 +37,5 @@
 	"show_minimap": false,
 	"spell_check": true,
 	"translate_tabs_to_spaces": true,
-	"trim_trailing_white_space_on_save": true,
-	"default_encoding": "UTF-8"
+	"trim_trailing_white_space_on_save": true
 }
