@@ -12,6 +12,8 @@ set PATH ~/.rbenv/bin $PATH
 # REMAINING PROBLEM: ~/.rbenv/bin and thus the shims are not seen outside
 #                    a fish shell
 
+set PATH $HOME/bin $PATH
+
 if type rbenv > /dev/null
     . (rbenv init -|psub)
     alias betty="~/dev/ruby-dev/betty/main.rb"
