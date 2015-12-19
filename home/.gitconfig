@@ -9,6 +9,7 @@
   br = branch
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   sub = reset HEAD --
+  squash = rebase -i
 
 [color]
 	ui = true
