@@ -8,8 +8,14 @@
   st = status -s
   br = branch
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  sub = reset HEAD --
+  sub = reset --quiet HEAD --
   squash = rebase -i
+  showfiles = show --pretty="format:" --name-only
+  branches = branch --all
+  tags = tag
+  stashes = stash list
+  uncommit = reset --mixed
+  addinteractive = add --patch
 
 [color]
 	ui = true
