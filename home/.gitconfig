@@ -5,11 +5,11 @@
 [alias]
   co = checkout
   ci = commit
-  st = status -s
+  st = status --short
   br = branch
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   sub = reset --quiet HEAD --
-  squash = rebase -i
+  squash = rebase --interactive
   showfiles = show --pretty="format:" --name-only
   branches = branch --all
   tags = tag
@@ -21,7 +21,7 @@
 	ui = true
 
 [core]
-	editor = subl -n -w
+	editor = subl --new-window --wait
 [push]
 	default = current
 [credential]
