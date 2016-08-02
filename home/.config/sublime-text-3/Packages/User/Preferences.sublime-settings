@@ -24,11 +24,12 @@
 	[
 		"subpixel_antialias"
 	],
-	"font_size": 13,
+	"font_size": 11,
 	"ignored_packages":
 	[
 		"CSS",
-		"Vintage"
+		"Vintage",
+		"Sublimerge Pro"
 	],
 	"rulers":
 	[
