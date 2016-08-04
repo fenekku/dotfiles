@@ -28,8 +28,8 @@
 	"ignored_packages":
 	[
 		"CSS",
-		"Vintage",
-		"Sublimerge Pro"
+		"Sublimerge Pro",
+		"Vintage"
 	],
 	"rulers":
 	[
@@ -38,5 +38,7 @@
 	"show_minimap": false,
 	"spell_check": true,
 	"translate_tabs_to_spaces": true,
-	"trim_trailing_white_space_on_save": true
-}
+	"trim_trailing_white_space_on_save": true,
+	"auto_complete_commit_on_tab": true,
+	"auto_complete_with_fields": true
+},
