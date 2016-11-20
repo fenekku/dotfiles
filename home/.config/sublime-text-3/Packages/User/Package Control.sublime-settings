@@ -1,14 +1,12 @@
 {
 	"auto_upgrade_last_run": null,
 	"bootstrapped": true,
-	"in_process_packages":
-	[
-	],
 	"installed_packages":
 	[
 		"AdvancedNewFile",
 		"CSS3",
 		"Djaneiro",
+		"Dockerfile Syntax Highlighting",
 		"EditorConfig",
 		"fish-shell",
 		"GitGutter",
@@ -21,7 +19,6 @@
 		"Pretty JSON",
 		"Python Improved",
 		"Sublimerge 3",
-		"Sublimerge Pro",
 		"Text Pastry"
 	],
 	"repositories":
