@@ -14,7 +14,6 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$HOME/usr/local:$PATH"
 #Below is fine as long as directory structure is kept the same across machines
 export PATH="$HOME/dev/nim-dev/nim/bin:$PATH"
-export PATH="$HOME/.nimble/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 # Colorize man pages
