@@ -20,3 +20,5 @@
 . $HOME/.homesick/repos/homeshick/homeshick.fish
 
 eval (python -m virtualfish)
+
+alias dc docker-compose
