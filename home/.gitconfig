@@ -17,6 +17,7 @@
   uncommit = reset --mixed
   addinteractive = add --patch
   cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
+  aliases = "!git config --get-regexp alias"
 
 [color]
 	ui = true
