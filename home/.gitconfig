@@ -16,7 +16,7 @@
   stashes = stash list
   uncommit = reset --mixed
   addinteractive = add --patch
-  cleanup = branch | awk '!/master|develop/' | xargs git branch -d
+  cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
 
 [color]
 	ui = true
