@@ -1,0 +1,15 @@
+<snippet>
+    <content><![CDATA[
+class ${1:Name}Factory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ${1:Name}
+
+    ${2:field} = ${3:value}
+
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>fbfactory</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>source.python</scope>
+    <description>factory_boy Factory</description>
+</snippet>
