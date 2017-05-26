@@ -1,10 +1,11 @@
 [user]
-	name = fenekku
-	email = fenekku@fenekku.com
+  name = fenekku
+  email = fenekku@fenekku.com
 
 [alias]
   co = checkout
   ci = commit
+  d = diff -w
   st = status --short
   br = branch
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
@@ -18,16 +19,17 @@
   addinteractive = add --patch
   cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
   aliases = "!git config --get-regexp alias"
+  praise = blame
 
 [color]
-	ui = true
+  ui = true
 
 [core]
-	editor = subl --new-window --wait
+  editor = subl --new-window --wait
 [push]
-	default = current
+  default = current
 [credential]
-	helper = cache --timeout 3600
+  helper = cache --timeout 3600
 
 [merge]
 tool = sublimerge
