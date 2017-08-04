@@ -20,6 +20,7 @@
   cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
   aliases = "!git config --get-regexp alias"
   praise = blame
+  search = log --all --grep
 
 [color]
   ui = true
