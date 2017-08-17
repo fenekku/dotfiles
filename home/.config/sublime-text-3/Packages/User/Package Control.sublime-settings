@@ -7,6 +7,7 @@
 	"installed_packages":
 	[
 		"AdvancedNewFile",
+		"AutoFileName",
 		"CSS3",
 		"Djaneiro",
 		"Dockerfile Syntax Highlighting",
@@ -18,6 +19,7 @@
 		"LESS",
 		"Markdown Extended",
 		"Markdown Preview",
+		"Monokai Extended",
 		"nginx",
 		"Package Control",
 		"PackageDev",

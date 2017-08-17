@@ -8,7 +8,21 @@
 	"auto_find_in_selection": true,
 	"binary_file_patterns":
 	[
-		".tox/"
+		".tox/",
+		"*.tar.gz",
+		"*.jpg",
+		"*.jpeg",
+		"*.png",
+		"*.gif",
+		"*.ttf",
+		"*.tga",
+		"*.dds",
+		"*.ico",
+		"*.eot",
+		"*.pdf",
+		"*.swf",
+		"*.jar",
+		"*.zip"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"default_encoding": "UTF-8",
