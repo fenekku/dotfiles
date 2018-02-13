@@ -8,12 +8,15 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# Added for the Heroku Toolbelt
+# Below is fine as long as directory structure is kept the same across machines
+# From last checked to first checked
+# Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
-#From last checked to first checked
-export PATH="$HOME/usr/local:$PATH"
-#Below is fine as long as directory structure is kept the same across machines
+# Nim binaries
 export PATH="$HOME/dev/nim-dev/nim/bin:$PATH"
+# Local Python executables
+export PATH="$HOME/.local/bin:$PATH"
+# Local binaries
 export PATH="$HOME/bin:$PATH"
 
 # Colorize man pages

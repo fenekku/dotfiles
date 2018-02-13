@@ -22,11 +22,13 @@
 		"*.pdf",
 		"*.swf",
 		"*.jar",
-		"*.zip"
+		"*.zip",
+		"node_modules/",
+		"tmp/"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"default_encoding": "UTF-8",
-	"dictionary": "Packages/Language - English/en_CA.dic",
+	"dictionary": "Packages/Language - French - Français/fr_FR (all variants).dic",
 	"draw_white_space": "all",
 	"find_selected_text": true,
 	"folder_exclude_patterns":
@@ -56,6 +58,7 @@
 	],
 	"show_minimap": false,
 	"spell_check": true,
+	"theme": "Adaptive.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true
 }

@@ -7,15 +7,18 @@
 	"installed_packages":
 	[
 		"AdvancedNewFile",
+		"Ansible",
 		"AutoFileName",
 		"CSS3",
 		"Djaneiro",
 		"Dockerfile Syntax Highlighting",
 		"EditorConfig",
-		"fish-shell",
+		"fish",
 		"GitGutter",
+		"Handlebars",
 		"HTML Mustache",
 		"Language - French - Français",
+		"LaTeXTools",
 		"LESS",
 		"Markdown Extended",
 		"Markdown Preview",
@@ -28,7 +31,8 @@
 		"SublimeLinter",
 		"SublimeLinter-flake8",
 		"Sublimerge 3",
-		"Text Pastry"
+		"Text Pastry",
+		"TypeScript"
 	],
 	"repositories":
 	[
