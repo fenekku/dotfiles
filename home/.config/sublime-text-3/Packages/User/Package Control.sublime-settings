@@ -26,13 +26,15 @@
 		"nginx",
 		"Package Control",
 		"PackageDev",
+		"PackageResourceViewer",
 		"Pretty JSON",
 		"Python Improved",
 		"SublimeLinter",
 		"SublimeLinter-flake8",
 		"Sublimerge 3",
 		"Text Pastry",
-		"TypeScript"
+		"TypeScript",
+		"Vue Syntax Highlight"
 	],
 	"repositories":
 	[
