@@ -1,4 +1,4 @@
-# Me: Not used anymore
+# Me: Used for bash on Windows
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -105,8 +105,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export EDITOR=subl
-
 # PATH 
 # Heroku binary
 export PATH="/usr/local/heroku/bin:$PATH"
@@ -116,3 +114,33 @@ export PATH="$HOME/dev/nim-dev/nim/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # Misc local binaries
 export PATH="$HOME/bin:$PATH"
+
+# Apps variables and shenanigans.
+# This is perfect for modular dotfiles
+if [ -f ~/.bash_apps ]; then
+    . ~/.bash_apps
+fi
+
+export EDITOR=nano
+
+#VirtualEnvWrapper
+#-----------------
+# where you keep all your virtual environments
+export WORKON_HOME=$HOME/.virtualenvs
+# where you will place your projects (optional)
+export PROJECT_HOME=$HOME
+source /usr/local/bin/virtualenvwrapper.sh
+
+source $HOME/.homesick/repos/homeshick/homeshick.sh
+
+#rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+export TLDR_COLOR_BLANK="white"
+export TLDR_COLOR_NAME="green"
+export TLDR_COLOR_DESCRIPTION="white"
+export TLDR_COLOR_EXAMPLE="green"
+export TLDR_COLOR_COMMAND="red"
+export TLDR_COLOR_PARAMETER="white"
+export TLDR_CACHE_ENABLED=1
+export TLDR_CACHE_MAX_AGE=720

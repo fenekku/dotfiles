@@ -26,7 +26,7 @@
   ui = true
 
 [core]
-  editor = subl --new-window --wait
+  editor = nano
 [push]
   default = current
 [credential]
