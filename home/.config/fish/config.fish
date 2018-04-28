@@ -19,6 +19,14 @@
 
 . $HOME/.homesick/repos/homeshick/homeshick.fish
 
-eval (python -m virtualfish)
+# pyenv
+set PYENV_ROOT $HOME/.pyenv
+set -x PATH $PYENV_ROOT/bin $PATH
+status --is-interactive; and . (pyenv init -|psub)
+status --is-interactive; and . (pyenv virtualenv-init -|psub)
+# . (pyenv init -|psub)
+# . (pyenv virtualenv-init -|psub)
 
-alias dc docker-compose
+# eval (python -m virtualfish)
+
+# alias dc docker-compose
