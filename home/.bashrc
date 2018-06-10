@@ -1,6 +1,9 @@
+# Me: Not used anymore
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
+
+
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -102,23 +105,14 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# Apps variables and shenanigans.
-# This is perfect for modular dotfiles
-if [ -f ~/.bash_apps ]; then
-    . ~/.bash_apps
-fi
-
 export EDITOR=subl
 
-#VirtualEnvWrapper
-#-----------------
-# where you keep all your virtual environments
-export WORKON_HOME=$HOME/.virtualenvs
-# where you will place your projects (optional)
-export PROJECT_HOME=$HOME
-source /usr/local/bin/virtualenvwrapper.sh
-
-source $HOME/.homesick/repos/homeshick/homeshick.sh
-
-#rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
+# PATH 
+# Heroku binary
+export PATH="/usr/local/heroku/bin:$PATH"
+# Nim binaries
+export PATH="$HOME/dev/nim-dev/nim/bin:$PATH"
+# Local Python executables
+export PATH="$HOME/.local/bin:$PATH"
+# Misc local binaries
+export PATH="$HOME/bin:$PATH"
