@@ -9,16 +9,6 @@ function fish_prompt --description 'Write out the prompt'
         set -g __fish_prompt_normal (set_color normal)
     end
 
-    if not set -q __fish_prompt_virtualenv_color
-        set -g __fish_prompt_virtualenv_color (set_color -b blue white)
-    end
-
-    if set -q VIRTUAL_ENV
-        set -g __fish_prompt_virtualenv "$__fish_prompt_virtualenv_color""("(basename "$VIRTUAL_ENV")")"$__fish_prompt_normal" "
-    else
-        set -g __fish_prompt_virtualenv  ""
-    end
-
     if not set -q __fish_prompt_git_color
         set -g __fish_prompt_git_color (set_color brown)
     end
@@ -55,7 +45,7 @@ function fish_prompt --description 'Write out the prompt'
         set -g __fish_prompt_userhost $USER"@"$__fish_prompt_hostname" "
     end
 
-    echo -n -s "$__fish_prompt_virtualenv" "$__fish_prompt_userhost" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" $__fish_prompt_git_branch "$__fish_prompt_char"
+    echo -n -s "$__fish_prompt_userhost" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" $__fish_prompt_git_branch "$__fish_prompt_char"
 
 end
 
