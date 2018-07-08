@@ -20,5 +20,5 @@ alias dc docker-compose
 # This is fine since environment variables from Bash on Windows
 # are never used for GUIs anyway.
 if not contains $HOME/bin $PATH
-  set --export PATH $HOME/bin $HOME/.local/bin $HOME/dev/nim-dev/nim/bin /usr/local/heroku/bin $PATH
+  set --export PATH $HOME/bin $HOME/.local/bin $HOME/.nimble/bin /usr/local/heroku/bin $PATH
 end
