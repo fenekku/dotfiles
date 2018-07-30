@@ -105,7 +105,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# PATH 
+## PATH 
+# rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
 # Heroku binary
 export PATH="/usr/local/heroku/bin:$PATH"
 # Nim binaries
@@ -121,7 +123,7 @@ if [ -f ~/.bash_apps ]; then
     . ~/.bash_apps
 fi
 
-export EDITOR=nano
+export EDITOR=emacs
 
 #VirtualEnvWrapper
 #-----------------
@@ -132,9 +134,6 @@ export PROJECT_HOME=$HOME
 source /usr/local/bin/virtualenvwrapper.sh
 
 source $HOME/.homesick/repos/homeshick/homeshick.sh
-
-#rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
 
 export TLDR_COLOR_BLANK="white"
 export TLDR_COLOR_NAME="green"
