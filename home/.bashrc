@@ -124,6 +124,7 @@ if [ -f ~/.bash_apps ]; then
 fi
 
 export EDITOR=emacs
+alias e='emacs'
 
 #VirtualEnvWrapper
 #-----------------
