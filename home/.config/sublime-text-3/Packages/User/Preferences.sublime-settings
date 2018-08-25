@@ -24,7 +24,8 @@
 		"*.jar",
 		"*.zip",
 		"node_modules/",
-		"tmp/"
+		"tmp/",
+		"*.egg-info"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"default_encoding": "UTF-8",
