@@ -1,3 +1,19 @@
 [
-    {"caption": "Project: Open", "command": "prompt_open_project"}
+    {
+        "caption": "Project: Open",
+        "command": "prompt_open_project"
+    },
+    {
+        "caption": "Sidebar: Toggle (Hide or Display)",
+        "command": "toggle_side_bar"
+    },
+    {
+        "caption": "Syntax: Assign Syntax to File Type",
+        "command": "assign_file_type"
+    },
+    {
+        "caption": "Line Ending: Convert to Unix",
+        "command": "set_line_ending",
+        "args": {"type": "unix"}
+    }
 ]
