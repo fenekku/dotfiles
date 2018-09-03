@@ -15,5 +15,23 @@
         "caption": "Line Ending: Convert to Unix",
         "command": "set_line_ending",
         "args": {"type": "unix"}
+    },
+    {
+        "caption": "View: Split layout in 2 columns",
+        "command": "set_layout",
+        "args": {
+            "cells": [[0, 0, 1, 1], [1, 0, 2, 1]],
+            "cols": [0.0, 0.5, 1.0],
+            "rows": [0.0, 1.0]
+        }
+    },
+    {
+        "caption": "View: Merge (revert) 1 layout",
+        "command": "set_layout",
+        "set_layout": {
+            "cells": [[0, 0, 1, 1]],
+            "cols": [0.0, 1.0],
+	    "rows": [0.0, 1.0]
+	}
     }
 ]
