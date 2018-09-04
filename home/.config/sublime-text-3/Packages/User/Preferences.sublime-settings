@@ -25,7 +25,8 @@
 		"*.zip",
 		"node_modules/",
 		"tmp/",
-		"*.egg-info"
+		"*.egg-info",
+		".eggs/"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"default_encoding": "UTF-8",
@@ -51,6 +52,8 @@
 	"ignored_packages":
 	[
 		"CSS",
+		"Flask Completions",
+		"MarkdownPreview",
 		"Vintage"
 	],
 	"rulers":
