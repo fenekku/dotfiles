@@ -105,13 +105,13 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export EDITOR=subl
+export EDITOR=emacs
 
-# PATH 
+# PATH
 # Heroku binary
 export PATH="/usr/local/heroku/bin:$PATH"
 # Nim binaries
-export PATH="$HOME/dev/nim-dev/nim/bin:$PATH"
+export PATH="$HOME/.nimble/bin:$PATH"
 # Local Python executables
 export PATH="$HOME/.local/bin:$PATH"
 # Misc local binaries
