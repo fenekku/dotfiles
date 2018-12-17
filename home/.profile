@@ -27,3 +27,5 @@ export LESS_TERMCAP_se=$'\e'"[0m"
 export LESS_TERMCAP_so=$'\e'"[1;44;33m"
 export LESS_TERMCAP_ue=$'\e'"[0m"
 export LESS_TERMCAP_us=$'\e'"[1;32m"
+
+export PATH="$HOME/.poetry/bin:$PATH"

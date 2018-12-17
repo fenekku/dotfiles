@@ -25,7 +25,7 @@
 		"*.zip",
 		"node_modules/",
 		"tmp/",
-		"*.egg-info",
+		"*.egg-info/",
 		".eggs/"
 	],
 	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
@@ -48,7 +48,7 @@
 	[
 		"subpixel_antialias"
 	],
-	"font_size": 11,
+	"font_size": 14,
 	"ignored_packages":
 	[
 		"CSS",

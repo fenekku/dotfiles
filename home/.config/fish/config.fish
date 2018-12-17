@@ -11,6 +11,9 @@ set --export PATH $HOME/.pyenv/bin $PATH
 status --is-interactive; and . (pyenv init -|psub)
 status --is-interactive; and . (pyenv virtualenv-init -|psub)
 
+# pipenv
+set --export PIPENV_VENV_IN_PROJECT 1
+
 # Docker
 alias containers "docker ps --all --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}'"
 alias dc docker-compose
