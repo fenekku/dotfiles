@@ -15,7 +15,7 @@ status --is-interactive; and . (pyenv virtualenv-init -|psub)
 set --export PIPENV_VENV_IN_PROJECT 1
 
 # Docker
-alias containers "docker ps --all --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Command}}'"
+alias containers "docker ps --all --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}'"
 alias dc docker-compose
 
 # Bash on Windows does not read the .profile
