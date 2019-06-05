@@ -33,5 +33,9 @@
             "cols": [0.0, 1.0],
 	    "rows": [0.0, 1.0]
 	}
+    },
+    {
+        "caption": "Convert Case: snake_case",
+        "command": "snake_case"
     }
 ]
