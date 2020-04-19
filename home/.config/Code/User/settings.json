@@ -1,0 +1,24 @@
+{
+    "editor.find.autoFindInSelection": true,
+    "editor.find.seedSearchStringFromSelection": true,
+    "editor.fontFamily": "'Ubuntu Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 15,
+    "editor.formatOnPaste": true,
+    "editor.minimap.enabled": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.renderWhitespace": "all",
+    "editor.snippetSuggestions": "top",
+    "files.encoding": "utf8",
+    "files.trimTrailingWhitespace": true,
+    "workbench.activityBar.visible": false,
+    "workbench.colorTheme": "Monokai",
+    "workbench.preferredDarkColorTheme": "Monokai",
+    "workbench.statusBar.visible": false,
+    "window.zoomLevel": 1,
+    "explorer.confirmDelete": false,
+    "[python]": {
+        "editor.rulers": [79]
+    },
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false
+}
