@@ -17,7 +17,8 @@
   stashes = stash list
   uncommit = reset --mixed
   addinteractive = add --patch
-  cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
+  # cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
+  ; cleanup = "!git checkout master && git branch --merged | grep -v '\*' | xargs -n 1 git branch -d"
   aliases = "!git config --get-regexp alias"
   praise = blame
   search = log --all --grep
@@ -27,6 +28,7 @@
 
 [core]
   editor = subl --new-window --wait
+  excludesfile = $HOME/.gitignore_global
 [push]
   default = current
 [credential]
