@@ -5,7 +5,7 @@
 [alias]
   co = checkout
   ci = commit
-  d = diff -w
+  d = icdiff
   st = status --short
   br = branch
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
@@ -22,6 +22,7 @@
   aliases = "!git config --get-regexp alias"
   praise = blame
   search = log --all --grep
+  sync = !git checkout master && git fetch --all --prune && git merge --ff-only upstream/master && git checkout -
 
 [color]
   ui = true
