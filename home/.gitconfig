@@ -17,8 +17,7 @@
   stashes = stash list
   uncommit = reset --mixed
   addinteractive = add --patch
-  # cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
-  ; cleanup = "!git checkout master && git branch --merged | grep -v '\*' | xargs -n 1 git branch -d"
+  cleanup = "!f(){ git checkout master ; for b in $(git branch --no-contains); do if [ ! $(git cherry -v upstream/master $b | grep \"^+\") ]; then git branch -D $b; fi; done };f"
   aliases = "!git config --get-regexp alias"
   praise = blame
   search = log --all --grep
