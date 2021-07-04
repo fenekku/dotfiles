@@ -8,7 +8,8 @@
   aliases = "!git config --get-regexp alias"
   br = branch
   branches = branch --all
-  cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
+  # cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
+  cleanup = "!f(){ git checkout master ; for b in $(git branch --no-contains); do if [ ! $(git cherry -v upstream/master $b | grep \"^+\") ]; then git branch -D $b; fi; done };f"
   co = checkout
   ci = commit
   d = icdiff
@@ -20,6 +21,7 @@
   st = status --short
   stashes = stash list
   sub = reset --quiet HEAD --
+  sync = !git checkout master && git fetch --all --prune && git merge --ff-only upstream/master && git checkout -
   tags = tag
   uncommit = reset --mixed
 
@@ -28,6 +30,7 @@
 
 [core]
   editor = subl --new-window --wait
+  excludesfile = $HOME/.gitignore_global
 
 [push]
   default = current

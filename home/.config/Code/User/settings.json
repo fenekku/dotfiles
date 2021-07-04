@@ -2,7 +2,7 @@
     "editor.find.autoFindInSelection": "multiline",
     "editor.find.seedSearchStringFromSelection": true,
     "editor.fontFamily": "'Ubuntu Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "editor.fontSize": 15,
+    "editor.fontSize": 14,
     "editor.formatOnPaste": true,
     "editor.minimap.enabled": false,
     "editor.multiCursorModifier": "ctrlCmd",
@@ -34,5 +34,14 @@
         "*.ipynb": "jupyter.notebook.ipynb"
     },
     "go.toolsManagement.autoUpdate": true,
-    "security.workspace.trust.untrustedFiles": "open"
+    "security.workspace.trust.untrustedFiles": "open",
+    "gitlens.codeLens.enabled": false,
+    "[javascript]": {
+        "editor.rulers": [
+            79
+        ]
+    },
+    "files.hotExit": "onExitAndWindowClose",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true
 }
