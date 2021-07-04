@@ -3,32 +3,35 @@
   email = fenekku@fenekku.com
 
 [alias]
+  a = add
+  addinteractive = add --patch
+  aliases = "!git config --get-regexp alias"
+  br = branch
+  branches = branch --all
+  cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
   co = checkout
   ci = commit
-  d = diff -w
-  st = status --short
-  br = branch
+  d = icdiff
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  sub = reset --quiet HEAD --
-  squash = rebase --interactive
-  showfiles = show --pretty="format:" --name-only
-  branches = branch --all
-  tags = tag
-  stashes = stash list
-  uncommit = reset --mixed
-  addinteractive = add --patch
-  cleanup = "!git branch | awk '!/master|develop/' | xargs git branch -d"
-  aliases = "!git config --get-regexp alias"
   praise = blame
   search = log --all --grep
+  showfiles = show --pretty="format:" --name-only
+  squash = rebase --interactive
+  st = status --short
+  stashes = stash list
+  sub = reset --quiet HEAD --
+  tags = tag
+  uncommit = reset --mixed
 
 [color]
   ui = true
 
 [core]
   editor = subl --new-window --wait
+
 [push]
   default = current
+
 [credential]
   helper = cache --timeout 3600
 
@@ -44,3 +47,6 @@ tool = sublimerge
 
 [difftool "sublimerge"]
 cmd = subl -n --wait \"$REMOTE\" \"$LOCAL\" --command \"sublimerge_diff_views {\\\"left_read_only\\\": true, \\\"right_read_only\\\": true}\"
+
+[icdiff]
+	options = --highlight --line-numbers

@@ -14,7 +14,7 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     if not set -q __fish_prompt_git_branch
-        set __fish_prompt_git_branch "$__fish_prompt_git_color"" ⎇  "(git branch ^/dev/null | grep \* | sed 's/* //')"$__fish_prompt_normal"
+        set __fish_prompt_git_branch "$__fish_prompt_git_color"" ⎇  "(git branch 2>/dev/null | grep \* | sed 's/* //')"$__fish_prompt_normal"
     end
 
     switch $USER
@@ -45,7 +45,7 @@ function fish_prompt --description 'Write out the prompt'
         set -g __fish_prompt_userhost $USER"@"$__fish_prompt_hostname" "
     end
 
-    echo -n -s "$__fish_prompt_userhost" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" $__fish_prompt_git_branch "$__fish_prompt_char"
+    echo -n -s "$__fish_prompt_userhost" "$__fish_prompt_cwd" (prompt_pwd) "$__fish_prompt_normal" "$__fish_prompt_git_branch" "$__fish_prompt_char"
 
 end
 

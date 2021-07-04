@@ -1,6 +1,11 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
     {
+        "key": "ctrl+alt+p",
+        "command": "workbench.action.openRecent",
+        "when": ""
+    },
+    {
         "key": "ctrl+d",
         "command": "-editor.action.addSelectionToNextFindMatch",
         "when": "editorFocus"
