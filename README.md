@@ -1,4 +1,4 @@
 dotfiles
 ========
 
-My [homeshick](https://github.com/andsens/homeshick) compatible dotfiles.
+My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
