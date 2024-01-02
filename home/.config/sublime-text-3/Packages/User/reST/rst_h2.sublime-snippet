@@ -1,8 +1,0 @@
-<snippet>
-    <content><![CDATA[
-${1:$SELECTION}
-${1/./=/g}]]></content>
-    <!-- Optional: Set a scope to limit where the snippet will trigger -->
-    <scope>text.restructuredtext</scope>
-    <description>reST: H2</description>
-</snippet>

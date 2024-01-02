@@ -1,6 +1,6 @@
 [user]
-  name = fenekku
-  email = fenekku@fenekku.com
+	email = fenekku@fenekku.com
+	name = Guillaume Viger
 
 [alias]
   a = add
@@ -12,7 +12,7 @@
   cleanup = "!f(){ git checkout master ; for b in $(git branch --no-contains); do if [ ! $(git cherry -v upstream/master $b | grep \"^+\") ]; then git branch -D $b; fi; done };f"
   co = checkout
   ci = commit
-  d = icdiff
+  d = diff
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   praise = blame
   search = log --all --grep
@@ -21,35 +21,20 @@
   st = status --short
   stashes = stash list
   sub = reset --quiet HEAD --
-  sync = !git checkout master && git fetch --all --prune && git merge --ff-only upstream/master && git checkout -
+  sync = !git checkout master && git fetch --all --prune && git merge --ff-only upstream/master && git submodule update --init --recursive && git checkout -
   tags = tag
   uncommit = reset --mixed
+  cp = cherry-pick
+  lrb = "!f() { git ls-remote \"$1\" | grep -e refs/heads/.*$ ; }; f"
 
 [color]
   ui = true
 
-[core]
-  editor = subl --new-window --wait
-  excludesfile = $HOME/.gitignore_global
-
-[push]
-  default = current
-
-[credential]
-  helper = cache --timeout 3600
-
 [merge]
-tool = sublimerge
+  tool = code
 
-[mergetool "sublimerge"]
-cmd = subl -n --wait \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\" --command \"sublimerge_diff_views\"
-trustExitCode = false
+[mergetool "code"]
+  cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 
-[diff]
-tool = sublimerge
-
-[difftool "sublimerge"]
-cmd = subl -n --wait \"$REMOTE\" \"$LOCAL\" --command \"sublimerge_diff_views {\\\"left_read_only\\\": true, \\\"right_read_only\\\": true}\"
-
-[icdiff]
-	options = --highlight --line-numbers
+[core]
+	pager = git-split-diffs --color | less -RFX

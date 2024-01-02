@@ -3,12 +3,14 @@
 My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 
 ## Meta
-*tasks*
+*TODO*
 - [x] Define the workflow
 - [ ] Go through all dotfiles in this repo and convert to chezmoi
 - [ ] push
 - [ ] Setup the ansible setup per https://github.com/logandonley/dotfiles
 - [ ] push
+- [ ] fish plugins
+- [ ] profiles
 
 ## Workflow
 *just once on each computer*

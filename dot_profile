@@ -10,10 +10,6 @@
 
 # Below is fine as long as directory structure is kept the same across machines
 # From last checked to first checked
-# Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-# Nim binaries
-export PATH="$HOME/.nimble/bin:$PATH"
 # Local Python executables
 export PATH="$HOME/.local/bin:$PATH"
 # Local binaries
