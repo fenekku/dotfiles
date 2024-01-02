@@ -4,11 +4,11 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 
 ## Meta
 *tasks*
-- Define the workflow
-- Go through all dotfiles in this repo and convert to chezmoi
-- push
-- Setup the ansible setup per https://github.com/logandonley/dotfiles
-- push
+- [x] Define the workflow
+- [ ] Go through all dotfiles in this repo and convert to chezmoi
+- [ ] push
+- [ ] Setup the ansible setup per https://github.com/logandonley/dotfiles
+- [ ] push
 
 ## Workflow
 *just once on each computer*
@@ -34,5 +34,18 @@ chezmoi cd
 
 *use git to add/commit/push files*
 Instructions not specific to chezmoi so skipped (understood how to do so already)
+
+
+*pull and apply changes*
+
+```bash
+chezmoi update
+```
+
+*setup new machine and apply changes*
+
+```bash
+chezmoi init --ssh fenekku/dotfiles --branch chezmoi_transition --apply
+```
 
 ## Setup

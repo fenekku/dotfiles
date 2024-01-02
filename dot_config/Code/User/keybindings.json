@@ -1,10 +1,6 @@
-// Place your key bindings in this file to override the defaultsauto[]
+// Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "ctrl+alt+p",
-        "command": "workbench.action.openRecent",
-        "when": ""
-    },
+    // Go to definition
     {
         "key": "ctrl+d",
         "command": "-editor.action.addSelectionToNextFindMatch",
@@ -20,6 +16,12 @@
         "command": "-editor.action.revealDefinition",
         "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
     },
+    // Line up
+    {
+        "key": "ctrl+shift+up",
+        "command": "-editor.action.insertCursorAbove",
+        "when": "editorTextFocus"
+    },
     {
         "key": "ctrl+shift+up",
         "command": "editor.action.moveLinesUpAction",
@@ -30,10 +32,11 @@
         "command": "-editor.action.moveLinesUpAction",
         "when": "editorTextFocus && !editorReadonly"
     },
+    // Line down
     {
-        "key": "ctrl+shift+up",
-        "command": "editor.action.moveLinesUpAction",
-        "when": "editorTextFocus && !editorReadonly"
+        "key": "ctrl+shift+down",
+        "command": "-editor.action.insertCursorBelow",
+        "when": "editorTextFocus"
     },
     {
         "key": "ctrl+shift+down",
@@ -41,13 +44,25 @@
         "when": "editorTextFocus && !editorReadonly"
     },
     {
-        "key": "ctrl+shift+down",
-        "command": "-editor.action.insertCursorBelow",
-        "when": "editorTextFocus"
+        "key": "alt+down",
+        "command": "-editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    // Project selection
+    // No removal necessary
+    {
+        "key": "ctrl+alt+p",
+        "command": "workbench.action.openRecent",
+        "when": ""
+    },
+    // Navigate back
+    // No removal necessary
+    {
+        "key": "alt+up",
+        "command": "workbench.action.navigateBack"
     },
     {
-        "key": "ctrl+shift+up",
-        "command": "-editor.action.insertCursorAbove",
-        "when": "editorTextFocus"
+        "key": "ctrl+alt+-",
+        "command": "-workbench.action.navigateBack"
     },
 ]
