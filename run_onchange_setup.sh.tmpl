@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+# This file will be run on every change to .setup_data/setup.yml
+# .chezmoidata/setup.yml hash: {{ include ".setup_data/setup.yml" | sha256sum }}
+ansible-playbook {{ joinPath .chezmoi.sourceDir ".setup_data/setup.yml" | quote }} --ask-become-pass
+echo "Ansible installation complete."
+
+
+{{ else if eq .chezmoi.os "windows" -}}
+# do nothing
+{{ end -}}

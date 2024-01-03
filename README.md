@@ -5,8 +5,8 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 ## Meta
 *TODO*
 - [x] Define the workflow
-- [ ] Go through all dotfiles in this repo and convert to chezmoi
-- [ ] push
+- [x] Go through all dotfiles in this repo and convert to chezmoi
+- [x] push
 - [ ] Setup the ansible setup per https://github.com/logandonley/dotfiles
 - [ ] push
 - [ ] fish plugins

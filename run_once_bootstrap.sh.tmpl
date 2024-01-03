@@ -1,0 +1,9 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+
+sudo apt update
+sudo apt install -y ansible
+
+{{ else if eq .chezmoi.os "windows" -}}
+# do nothing
+{{ end -}}

@@ -65,4 +65,13 @@
         "key": "ctrl+alt+-",
         "command": "-workbench.action.navigateBack"
     },
+    // FFFI bindings
+    {
+        "key": "ctrl+o",
+        "command": "fffi.open"
+    },
+    {
+        "key": "ctrl+shift+s",
+        "command": "fffi.saveAs"
+    },
 ]
