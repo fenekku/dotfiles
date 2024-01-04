@@ -1,5 +1,5 @@
 ---
-- name: "Machine setup"
+- name: "Ubuntu machine setup"
   hosts: localhost
   connection: local
   gather_facts: true
@@ -9,19 +9,105 @@
 
   tasks:
     # - name: Get helpful facts
-    #   ansible.builtin.set_fact:
-    #     foo: "{{ ansible_env.XYZ }}"
+    # - name: Debug
+    #   ansible.builtin.debug:
+    #     msg: "{{ ansible_env }}"
 
-    # - name: Install packages
-    #   ansible.builtin.apt:
-    #     name:
-    #       - git
-    #       - htop
-    #       - firefox
-    #       - autoconf
-    #   become: true
+    - name: Get my user
+      ansible.builtin.set_fact:
+        remote_regular_user: "{{ ansible_user_id }}"
+
+    # - name: Debug
+    #   ansible.builtin.debug:
+    #     msg: "Regular: {{ remote_regular_user }}"
+
+    # Initial comment out
+    - name: Install packages
+      ansible.builtin.apt:
+        name:
+          # Development
+          - build-essential
+          - libssl-dev
+          - zlib1g-dev
+          - libbz2-dev
+          - libreadline-dev
+          - libsqlite3-dev
+          - llvm
+          - libncurses5-dev
+          - libncursesw5-dev
+          - tk-dev
+          - curl
+          - emacs-nox
+          - liblzma-dev
+          - git-core
+          # Alternative package installer
+          - gdebi-core
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+          # Python
+          - python3-apt
+          - python3-venv
+          - python3-pip
+          - python3-gpg
+
+          #       - vim
+          #       - gh
+          #       - gnome-tweaks
+          #       - gcc
+          #       - helm
+          #       - go-task
+          #       - ripgrep
+          #       - poetry
+          #       - zsh
+          #       - fzf
+          #       - tmux
+          #       - ffmpeg-free
+          #       - zlib
+          #       - zlib-devel
+          #       - make
+          #       - patch
+          #       - bzip2
+          #       - bzip2-devel
+          #       - readline-devel
+          #       - sqlite
+          #       - sqlite-devel
+          #       - openssl-devel
+          #       - tk-devel
+          #       - libffi-devel
+          #       - xz-devel
+          #       - libuuid-devel
+          #       - gdbm-libs
+          #       - libnsl2
+          #       - luarocks
+          #       - wl-clipboard
+          #       - fd-find
+          #       - gcc-c++
+          #       - doctl
+          #       - helix
+          #       - "@Development Tools"
+          #       - "@C Development Tools and Libraries"
+          #       - ncurses-devel
+          #       - wxGTK-devel
+          #       - wxBase
+          #       - java-1.8.0-openjdk-devel
+          #       - libiodbc
+          #       - unixODBC-devel.x86_64
+          #       - erlang-odbc.x86_64
+          #       - libxslt
+          #       - fop
+          #       - podman-compose
+          #       - inotify-tools
+          #       - blender
+        state: present
+      become: true
 
     # Python stuff - START
+
+    - name: Upgrade pip
+      ansible.builtin.command:
+        cmd: pip install --upgrade pip
+      become: true
 
     # Only for Ubuntu 22.04 and below, but should be fine for above too
     - name: Install pipx
@@ -38,61 +124,26 @@
     # Python stuff - END
 
 
-    #       - vim
-    #       - gh
-    #       - gnome-tweaks
-    #       - gcc
-    #       - helm
-    #       - go-task
-    #       - ripgrep
-    #       - poetry
-    #       - zsh
-    #       - fzf
-    #       - tmux
-    #       - ffmpeg-free
-    #       - zlib
-    #       - zlib-devel
-    #       - make
-    #       - patch
-    #       - bzip2
-    #       - bzip2-devel
-    #       - readline-devel
-    #       - sqlite
-    #       - sqlite-devel
-    #       - openssl-devel
-    #       - tk-devel
-    #       - libffi-devel
-    #       - xz-devel
-    #       - libuuid-devel
-    #       - gdbm-libs
-    #       - libnsl2
-    #       - luarocks
-    #       - wl-clipboard
-    #       - fd-find
-    #       - gcc-c++
-    #       - doctl
-    #       - helix
-    #       - "@Development Tools"
-    #       - "@C Development Tools and Libraries"
-    #       - ncurses-devel
-    #       - wxGTK-devel
-    #       - wxBase
-    #       - java-1.8.0-openjdk-devel
-    #       - libiodbc
-    #       - unixODBC-devel.x86_64
-    #       - erlang-odbc.x86_64
-    #       - libxslt
-    #       - fop
-    #       - podman-compose
-    #       - inotify-tools
-    #       - blender
-    #     state: present
+    # Fish stuff - START
+    - name: Add fish ppa
+      ansible.builtin.apt_repository:
+        repo: ppa:fish-shell/release-3
 
-    # - name: Change shell to zsh
-    #   ansible.builtin.user:
-    #     name: "{{ remote_regular_user }}"
-    #     shell: /usr/bin/zsh
+    - name: Install fish
+      ansible.builtin.apt:
+        name: fish
+        state: present
 
+    - name: Change shell to fish
+      ansible.builtin.user:
+        name: "{{ remote_regular_user }}"
+        shell: /usr/bin/fish
+
+    # Fish stuff - END
+
+
+
+    # LEFTOVERS
     # - name: Install DNF plugins core
     #   ansible.builtin.dnf:
     #     name: dnf-plugins-core
