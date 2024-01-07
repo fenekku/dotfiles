@@ -3,7 +3,8 @@
   hosts: localhost
   connection: local
   gather_facts: true
-  # vars:
+  vars:
+    python_version: "3.12"
   #   flyctl_version: "0.1.130"
   #   pulumi_version: "v3.94.2"
 
@@ -104,6 +105,30 @@
 
     # Python stuff - START
 
+    # TODO: tryout on new machine
+    - name: Check if pyenv is installed
+      ansible.builtin.command:
+        cmd: pyenv --version
+      register: pyenv_installed
+      ignore_errors: true
+      changed_when: false  # what does it do?
+
+    - name: Setup pyenv
+      when: pyenv_installed is failed
+      ansible.builtin.command:
+        cmd: wget --quiet https://pyenv.run --output-document=- | bash
+
+    - name: Install Python {{ python_version }}
+      when: pyenv_installed is failed
+      ansible.builtin.command:
+        cmd: pyenv install {{ python_version }}
+      register: python_installed
+
+    - name: Set python {{ python_version }} as the global version
+      when: pyenv_installed is failed
+      ansible.builtin.command:
+        cmd: pyenv global {{ python_version}}
+
     - name: Upgrade pip
       ansible.builtin.command:
         cmd: pip install --upgrade pip
@@ -139,7 +164,110 @@
         name: "{{ remote_regular_user }}"
         shell: /usr/bin/fish
 
+    - name: Check if fisher installed
+      ansible.builtin.command:
+        cmd: fisher --version
+      register: fisher_installed
+      ignore_errors: true
+
+    - name: Install fisher
+      when: fisher_installed is failed
+      ansible.builtin.command:
+        cmd: curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+
     # Fish stuff - END
+
+    # Install ulauncher - START
+    # commented out for now since pop_os may have launcher already
+    # - name: Add ulauncher ppa
+    #   ansible.builtin.apt_repository:
+    #     repo: ppa:agornostal/ulauncher
+
+    # - name: Install ulauncher
+    #   ansible.builtin.apt:
+    #     name: ulauncher
+    #     state: present
+    # Install ulauncher - END
+
+
+    # VSCode - START
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    rm -f packages.microsoft.gpg
+
+    # - TODO: switch to codium?
+    - name: Install VSCode
+      block:
+        - name: Import Microsoft GPG Key
+          ansible.builtin.get_url:
+            url: https://packages.microsoft.com/keys/microsoft.asc
+            dest: /etc/apt/trusted.gpg.d/
+            # TODO: add correct checksum
+            # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
+
+        - name: Add Visual Studio Code ppa
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
+            state: present
+        # - name: Add Visual Studio Code Repo
+        #   ansible.builtin.yum_repository:
+        #     name: vscode
+        #     description: Visual Studio Code
+        #     baseurl: https://packages.microsoft.com/yumrepos/vscode
+        #     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        #     gpgcheck: true
+        #     enabled: true
+
+        - name: Install VS Code
+          ansible.builtin.apt:
+            name: code
+            state: present
+
+    # Commenting out for now
+    # - name: Install Docker
+    #   block:
+    #     - name: Import Docker GPG key
+    #       ansible.builtin.get_url:
+    #         url: https://download.docker.com/linux/ubuntu/gpg
+    #         dest: /etc/apt/trusted.gpg.d/docker.asc
+    #         # TODO: add correct checksum
+    #         # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
+
+    #     - name: Add Docker ppa
+    #       ansible.builtin.apt_repository:
+    #         # or UBUNTU_CODENAME
+    #         repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable"
+    #         state: present
+
+        # - name: Install docker
+        #   ansible.builtin.apt:
+        #     name: docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        #     state: present
+
+        # - name: Add Docker group
+        #   ansible.builtin.group:
+        #     name: docker
+        #     state: present
+
+        # - name: Add user to docker group
+        #   ansible.builtin.user:
+        #     name: "{{ remote_regular_user }}"
+        #     groups: docker
+        #     append: true
+
+
+    # TODO: install gh - may be part of main packages
+    # curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+    # echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+    # TODO: install node
+    # fisher install jorgebucaran/nvm.fish
+    # nvm install $NODE_VERSION
+    # nvm use $NODE_VERSION
+
+
+    # sudo apt autoremove
 
 
 
@@ -168,54 +296,7 @@
     #     name: brave-browser
     #     state: present
 
-    # - name: Import Microsoft GPG Key
-    #   ansible.builtin.rpm_key:
-    #     key: https://packages.microsoft.com/keys/microsoft.asc
-    #     state: present
 
-    # - name: Add Visual Studio Code Repo
-    #   ansible.builtin.yum_repository:
-    #     name: vscode
-    #     description: Visual Studio Code
-    #     baseurl: https://packages.microsoft.com/yumrepos/vscode
-    #     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    #     gpgcheck: true
-    #     enabled: true
-
-    # - name: Install VS Code
-    #   ansible.builtin.dnf:
-    #     name: code
-    #     state: present
-
-    # - name: Add Docker repo
-    #   ansible.builtin.yum_repository:
-    #     name: docker
-    #     description: Docker repo
-    #     baseurl: "https://download.docker.com/linux/fedora/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/stable"
-    #     gpgkey: "https://download.docker.com/linux/fedora/gpg"
-    #     gpgcheck: true
-    #     enabled: true
-
-    # - name: Install Docker
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - docker-ce
-    #       - docker-ce-cli
-    #       - containerd.io
-    #       - docker-buildx-plugin
-    #       - docker-compose-plugin
-    #     state: present
-
-    # - name: Add Docker group
-    #   ansible.builtin.group:
-    #     name: docker
-    #     state: present
-
-    # - name: Add user to docker group
-    #   ansible.builtin.user:
-    #     name: "{{ remote_regular_user }}"
-    #     groups: docker
-    #     append: true
 
     # - name: Add rtx config manager
     #   ansible.builtin.yum_repository:
