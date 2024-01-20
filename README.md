@@ -13,9 +13,10 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 - [ ] profiles
 
 ## Workflow
-*just once on each computer*
-- Install chezmoi
+*Once on each computer*
+- Install chezmoi: `sh -c "$(wget -qO- get.chezmoi.io)"`
 - initialize it: `chezmoi init --ssh fenekku/dotfiles --branch chezmoi_transition`
+- Apply changes: `chezmoi apply`
 
 *track an existing file*
 ```bash

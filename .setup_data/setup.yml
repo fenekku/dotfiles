@@ -1,12 +1,10 @@
 ---
-- name: "Ubuntu machine setup"
+- name: "Pop_OS machine setup"
   hosts: localhost
   connection: local
   gather_facts: true
   vars:
     python_version: "3.12"
-  #   flyctl_version: "0.1.130"
-  #   pulumi_version: "v3.94.2"
 
   tasks:
     # - name: Get helpful facts
@@ -104,102 +102,97 @@
       become: true
 
     # Python stuff - START
+    - name: Setup Python
+      block:
+        - name: Check if pyenv is installed
+          ansible.builtin.shell:
+            cmd: bash -lc "pyenv --version"
+          register: pyenv_installed
+          ignore_errors: true
+          changed_when: false  # what does it do?
 
-    # TODO: tryout on new machine
-    - name: Check if pyenv is installed
-      ansible.builtin.command:
-        cmd: pyenv --version
-      register: pyenv_installed
-      ignore_errors: true
-      changed_when: false  # what does it do?
+        - name: Install pyenv because not installed
+          when: pyenv_installed is failed
+          ansible.builtin.shell:
+            cmd: curl https://pyenv.run | bash
 
-    - name: Setup pyenv
-      when: pyenv_installed is failed
-      ansible.builtin.command:
-        cmd: wget --quiet https://pyenv.run --output-document=- | bash
+        - name: Write required .profile changes
+          ansible.builtin.blockinfile:
+            path: ~/.profile
+            block: |
+              export PYENV_ROOT="$HOME/.pyenv"
+              [[ -d $PYENV_ROOT/bin ]] && export PATH=$PYENV_ROOT/bin:$PATH
+              eval "$(pyenv init -)"
 
-    - name: Install Python {{ python_version }}
-      when: pyenv_installed is failed
-      ansible.builtin.command:
-        cmd: pyenv install {{ python_version }}
-      register: python_installed
+        - name: Install Python {{ python_version }}
+          when: pyenv_installed is failed
+          ansible.builtin.shell:
+            cmd: pyenv install {{ python_version }}
+          register: python_installed
 
-    - name: Set python {{ python_version }} as the global version
-      when: pyenv_installed is failed
-      ansible.builtin.command:
-        cmd: pyenv global {{ python_version}}
+        - name: Set python {{ python_version }} as the global version
+          when: pyenv_installed is failed
+          ansible.builtin.shell:
+            cmd: pyenv global {{ python_version}}
 
-    - name: Upgrade pip
-      ansible.builtin.command:
-        cmd: pip install --upgrade pip
-      become: true
+        - name: Upgrade pip
+          ansible.builtin.shell:
+            cmd: pip install --upgrade pip
+          become: true
 
-    # Only for Ubuntu 22.04 and below, but should be fine for above too
-    - name: Install pipx
-      ansible.builtin.command:
-        cmd: python3 -m {{ item }}
-      with_items:
-        - pip install --user pipx
-        - pipx ensurepath
+        # Only for Ubuntu 22.04 and below, but should be fine for above too
+        - name: Install pipx
+          ansible.builtin.shell:
+            cmd: python3 -m {{ item }}
+          with_items:
+            - pip install --user pipx
+            - pipx ensurepath
 
-    - name: Install pipenv
-      ansible.builtin.command:
-        cmd: pipx install pipenv
+        - name: Install pipenv
+          ansible.builtin.shell:
+            cmd: bash -lc "pipx install pipenv"
 
-    # Python stuff - END
+    # STOPPED HERE
 
-
+    # TODO: re-enable fish
     # Fish stuff - START
-    - name: Add fish ppa
-      ansible.builtin.apt_repository:
-        repo: ppa:fish-shell/release-3
+    #- name: Add fish ppa
+    #  ansible.builtin.apt_repository:
+    #    repo: ppa:fish-shell/release-3
 
-    - name: Install fish
-      ansible.builtin.apt:
-        name: fish
-        state: present
+    #- name: Install fish
+    #  ansible.builtin.apt:
+    #    name: fish
+    #    state: present
 
-    - name: Change shell to fish
-      ansible.builtin.user:
-        name: "{{ remote_regular_user }}"
-        shell: /usr/bin/fish
+    #- name: Change shell to fish
+    #  ansible.builtin.user:
+    #    name: "{{ remote_regular_user }}"
+    #    shell: /usr/bin/fish
 
-    - name: Check if fisher installed
-      ansible.builtin.command:
-        cmd: fisher --version
-      register: fisher_installed
-      ignore_errors: true
+    #- name: Check if fisher installed
+    #  ansible.builtin.command:
+    #    cmd: fisher --version
+    #  register: fisher_installed
+    #  ignore_errors: true
 
-    - name: Install fisher
-      when: fisher_installed is failed
-      ansible.builtin.command:
-        cmd: curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+    #- name: Install fisher
+    ##  when: fisher_installed is failed
+    #  ansible.builtin.shell:
+    #    cmd: curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 
     # Fish stuff - END
 
-    # Install ulauncher - START
-    # commented out for now since pop_os may have launcher already
-    # - name: Add ulauncher ppa
-    #   ansible.builtin.apt_repository:
-    #     repo: ppa:agornostal/ulauncher
-
-    # - name: Install ulauncher
-    #   ansible.builtin.apt:
-    #     name: ulauncher
-    #     state: present
-    # Install ulauncher - END
-
-
     # VSCode - START
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    rm -f packages.microsoft.gpg
+    # wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    # sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    # sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    # rm -f packages.microsoft.gpg
 
-    # - TODO: switch to codium?
     - name: Install VSCode
       block:
         - name: Import Microsoft GPG Key
+          become: yes
           ansible.builtin.get_url:
             url: https://packages.microsoft.com/keys/microsoft.asc
             dest: /etc/apt/trusted.gpg.d/
@@ -207,24 +200,18 @@
             # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
 
         - name: Add Visual Studio Code ppa
+          become: yes
           ansible.builtin.apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
             state: present
-        # - name: Add Visual Studio Code Repo
-        #   ansible.builtin.yum_repository:
-        #     name: vscode
-        #     description: Visual Studio Code
-        #     baseurl: https://packages.microsoft.com/yumrepos/vscode
-        #     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-        #     gpgcheck: true
-        #     enabled: true
 
         - name: Install VS Code
+          become: yes
           ansible.builtin.apt:
             name: code
             state: present
 
-    # Commenting out for now
+    # TODO: install docker
     # - name: Install Docker
     #   block:
     #     - name: Import Docker GPG key
@@ -257,18 +244,45 @@
         #     append: true
 
 
-    # TODO: install gh - may be part of main packages
-    # curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-    # echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    # TODO: install gh
+    - name: Install gh
+      block:
+        - name: Import GPG Key
+          ansible.builtin.get_url:
+            url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+            dest: /etc/apt/trusted.gpg.d/
+
+        - name: Add ppa
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+            state: present
+
+        - name: Install
+          ansible.builtin.apt:
+            name: code
+            state: present
 
     # TODO: install node
     # fisher install jorgebucaran/nvm.fish
     # nvm install $NODE_VERSION
     # nvm use $NODE_VERSION
 
+    # TODO: install git-split-diffs
+
+    # Install ulauncher - START
+    # commented out for now since pop_os may have launcher already
+    # - name: Add ulauncher ppa
+    #   ansible.builtin.apt_repository:
+    #     repo: ppa:agornostal/ulauncher
+
+    # - name: Install ulauncher
+    #   ansible.builtin.apt:
+    #     name: ulauncher
+    #     state: present
+    # Install ulauncher - END
+
 
     # sudo apt autoremove
-
 
 
     # LEFTOVERS
@@ -295,8 +309,6 @@
     #   ansible.builtin.dnf:
     #     name: brave-browser
     #     state: present
-
-
 
     # - name: Add rtx config manager
     #   ansible.builtin.yum_repository:
