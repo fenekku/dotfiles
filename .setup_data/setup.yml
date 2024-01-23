@@ -1,28 +1,35 @@
 ---
+# Couple notes:
+#
+# - ansible.builtin.shell uses /bin/sh by default
+#   and nothing seems to be loaded
+# - if the fish executable is used for the shell,
+#   then .config/fish/config.fish is loaded
+#
+
 - name: "Pop_OS machine setup"
   hosts: localhost
   connection: local
   gather_facts: true
   vars:
     python_version: "3.12"
-
+    node_version: "20.11"  # TODO: make it so latest LTS installed
+    fish_path: /usr/bin/fish
   tasks:
     # - name: Get helpful facts
-    # - name: Debug
-    #   ansible.builtin.debug:
-    #     msg: "{{ ansible_env }}"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ ansible_env }}"
 
     - name: Get my user
       ansible.builtin.set_fact:
         remote_regular_user: "{{ ansible_user_id }}"
 
-    # - name: Debug
-    #   ansible.builtin.debug:
-    #     msg: "Regular: {{ remote_regular_user }}"
-
-    # Initial comment out
     - name: Install packages
+      when: false
+      become: true
       ansible.builtin.apt:
+        cache_valid_time: 3600
         name:
           # Development
           - build-essential
@@ -49,60 +56,112 @@
           - python3-venv
           - python3-pip
           - python3-gpg
+          # Nice tools
+          - zoxide
+          # Misc
 
-          #       - vim
-          #       - gh
-          #       - gnome-tweaks
-          #       - gcc
-          #       - helm
-          #       - go-task
-          #       - ripgrep
-          #       - poetry
-          #       - zsh
-          #       - fzf
-          #       - tmux
-          #       - ffmpeg-free
-          #       - zlib
-          #       - zlib-devel
-          #       - make
-          #       - patch
-          #       - bzip2
-          #       - bzip2-devel
-          #       - readline-devel
-          #       - sqlite
-          #       - sqlite-devel
-          #       - openssl-devel
-          #       - tk-devel
-          #       - libffi-devel
-          #       - xz-devel
-          #       - libuuid-devel
-          #       - gdbm-libs
-          #       - libnsl2
-          #       - luarocks
-          #       - wl-clipboard
-          #       - fd-find
-          #       - gcc-c++
-          #       - doctl
-          #       - helix
-          #       - "@Development Tools"
-          #       - "@C Development Tools and Libraries"
-          #       - ncurses-devel
-          #       - wxGTK-devel
-          #       - wxBase
-          #       - java-1.8.0-openjdk-devel
-          #       - libiodbc
-          #       - unixODBC-devel.x86_64
-          #       - erlang-odbc.x86_64
-          #       - libxslt
-          #       - fop
-          #       - podman-compose
-          #       - inotify-tools
-          #       - blender
         state: present
-      become: true
 
-    # Python stuff - START
+    - name: Install VSCode
+      when: false
+      # VSCode - START
+      # wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+      # sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+      # sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+      # rm -f packages.microsoft.gpg
+      block:
+        - name: Import Microsoft GPG Key
+          become: yes
+          ansible.builtin.get_url:
+            url: https://packages.microsoft.com/keys/microsoft.asc
+            dest: /etc/apt/trusted.gpg.d/
+            # TODO: add correct checksum
+            # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
+
+        - name: Add Visual Studio Code ppa
+          become: yes
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
+            state: present
+
+        - name: Install VS Code
+          become: yes
+          ansible.builtin.apt:
+            name: code
+            state: present
+
+    - name: Create folder structure
+      block:
+        - name: dev folder
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/dev"
+            state: directory
+
+        - name: Packages folder
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/Downloads/Packages"
+            state: directory
+
+    - name: Install Synology Drive Client
+      block:
+        - name: Download client
+          ansible.builtin.get_url:
+            url: https://global.synologydownload.com/download/Utility/SynologyDriveClient/3.4.0-15724/Ubuntu/Installer/synology-drive-client-15724.x86_64.deb
+            dest: "{{ ansible_env.HOME }}/Downloads/Packages"
+
+        - name: Install client
+          become: true
+          ansible.builtin.apt:
+            deb: "{{ ansible_env.HOME }}/Downloads/Packages/synology-drive-client-15724.x86_64.deb"
+
+        - name: Launch Synology Drive client reminder
+          ansible.builtin.debug:
+            msg: "Don't forget to launch Synology Drive at least once to set it up!"
+
+    - name: Setup fish
+      block:
+        - name: Add fish ppa
+          become: true
+          ansible.builtin.apt_repository:
+            repo: ppa:fish-shell/release-3
+
+        - name: Install fish
+          become: true
+          ansible.builtin.apt:
+            name: fish
+            state: present
+
+        # STOPPED HERE
+        # The command hangs forever
+        - name: Install starship
+          ansible.builtin.shell:
+            cmd: curl -sS https://starship.rs/install.sh | sh
+
+        - name: Change shell to fish
+          become: true
+          ansible.builtin.user:
+            name: "{{ remote_regular_user }}"
+            shell: "{{ fish_path }}"
+
+        - name: Check if fisher installed
+          ansible.builtin.shell:
+            cmd: fisher --version
+            executable: "{{ fish_path }}"
+          register: fisher_installed
+          ignore_errors: true
+
+        - name: Install fisher
+          when: fisher_installed is failed
+          ansible.builtin.shell:
+            cmd: curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+            executable: "{{ fish_path }}"
+
+
+    # TODO: install git-split-diffs
+
+
     - name: Setup Python
+      when: false
       block:
         - name: Check if pyenv is installed
           ansible.builtin.shell:
@@ -146,70 +205,43 @@
             cmd: python3 -m {{ item }}
           with_items:
             - pip install --user pipx
-            - pipx ensurepath
 
         - name: Install pipenv
           ansible.builtin.shell:
             cmd: bash -lc "pipx install pipenv"
 
-    # STOPPED HERE
 
-    # TODO: re-enable fish
-    # Fish stuff - START
-    #- name: Add fish ppa
-    #  ansible.builtin.apt_repository:
-    #    repo: ppa:fish-shell/release-3
 
-    #- name: Install fish
-    #  ansible.builtin.apt:
-    #    name: fish
-    #    state: present
 
-    #- name: Change shell to fish
-    #  ansible.builtin.user:
-    #    name: "{{ remote_regular_user }}"
-    #    shell: /usr/bin/fish
 
-    #- name: Check if fisher installed
-    #  ansible.builtin.command:
-    #    cmd: fisher --version
-    #  register: fisher_installed
-    #  ignore_errors: true
 
-    #- name: Install fisher
-    ##  when: fisher_installed is failed
-    #  ansible.builtin.shell:
-    #    cmd: curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-
-    # Fish stuff - END
-
-    # VSCode - START
-    # wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    # sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    # sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    # rm -f packages.microsoft.gpg
-
-    - name: Install VSCode
+    - name: Install node
       block:
-        - name: Import Microsoft GPG Key
-          become: yes
-          ansible.builtin.get_url:
-            url: https://packages.microsoft.com/keys/microsoft.asc
-            dest: /etc/apt/trusted.gpg.d/
-            # TODO: add correct checksum
-            # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
+        - name: Check if node installed
+          ignore_errors: true
+          ansible.builtin.shell:
+            cmd: node --version
+            executable: "{{ fish_path }}"
+          register: node_installed
 
-        - name: Add Visual Studio Code ppa
-          become: yes
-          ansible.builtin.apt_repository:
-            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
-            state: present
+        - name: Check if nvm installed
+          ignore_errors: true
+          ansible.builtin.shell:
+            cmd: nvm --version
+          register: nvm_installed
 
-        - name: Install VS Code
-          become: yes
-          ansible.builtin.apt:
-            name: code
-            state: present
+        - name: Install nvm
+          when: nvm_installed is failed
+          ansible.builtin.shell:
+            cmd: fisher install jorgebucaran/nvm.fish
+
+        - name: Install Node {{ node_version }}
+          when: node_installed is failed
+          ansible.builtin.shell:
+            cmd: |
+              nvm install {{ node_version }}
+              nvm use {{ nove_version }}
+
 
     # TODO: install docker
     # - name: Install Docker
@@ -244,8 +276,8 @@
         #     append: true
 
 
-    # TODO: install gh
     - name: Install gh
+      when: false
       block:
         - name: Import GPG Key
           ansible.builtin.get_url:
@@ -262,12 +294,7 @@
             name: code
             state: present
 
-    # TODO: install node
-    # fisher install jorgebucaran/nvm.fish
-    # nvm install $NODE_VERSION
-    # nvm use $NODE_VERSION
 
-    # TODO: install git-split-diffs
 
     # Install ulauncher - START
     # commented out for now since pop_os may have launcher already

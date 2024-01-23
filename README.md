@@ -7,9 +7,14 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 - [x] Define the workflow
 - [x] Go through all dotfiles in this repo and convert to chezmoi
 - [x] push
-- [ ] Setup the ansible setup per https://github.com/logandonley/dotfiles
-- [ ] push
-- [ ] fish plugins
+- [x] Setup the ansible setup per https://github.com/logandonley/dotfiles
+- [x] push
+- [x] fish plugins
+- [x] drive client
+- [ ] starship
+- [ ] git split diff
+- [ ] zellij
+- [ ] test on other clean install
 - [ ] profiles
 
 ## Workflow
@@ -51,4 +56,13 @@ chezmoi update
 chezmoi init --ssh fenekku/dotfiles --branch chezmoi_transition --apply
 ```
 
-## Setup
+## Rotailles
+export PATH="$HOME/.poetry/bin:$PATH"
+-# BEGIN ANSIBLE MANAGED BLOCK
+-export PYENV_ROOT="$HOME/.pyenv"
+-[[ -d $PYENV_ROOT/bin ]] && export PATH=$PYENV_ROOT/bin:$PATH
+-eval "$(pyenv init -)"
+-# END ANSIBLE MANAGED BLOCK
+-
+-# Created by `pipx` on 2024-01-20 20:54:32
+-export PATH="$PATH:/home/guillaume/.local/bin"

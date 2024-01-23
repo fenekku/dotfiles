@@ -3,6 +3,7 @@ if status is-interactive
     eval (zellij setup --generate-auto-start fish | string collect)
 end
 
+# what is this?
 # Generated for envman. Do not edit.
 test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.fish"
 
