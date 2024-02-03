@@ -11,9 +11,10 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 - [x] push
 - [x] fish plugins
 - [x] drive client
-- [ ] starship
-- [ ] git split diff
+- [x] starship
 - [ ] zellij
+- [ ] git split diff
+- [ ] python still not set properly
 - [ ] test on other clean install
 - [ ] profiles
 

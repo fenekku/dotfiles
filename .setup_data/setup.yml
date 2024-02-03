@@ -16,7 +16,6 @@
     node_version: "20.11"  # TODO: make it so latest LTS installed
     fish_path: /usr/bin/fish
   tasks:
-    # - name: Get helpful facts
     - name: Debug
       ansible.builtin.debug:
         msg: "{{ ansible_env }}"
@@ -26,7 +25,6 @@
         remote_regular_user: "{{ ansible_user_id }}"
 
     - name: Install packages
-      when: false
       become: true
       ansible.builtin.apt:
         cache_valid_time: 3600
@@ -59,11 +57,12 @@
           # Nice tools
           - zoxide
           # Misc
-
+          - gnome-tweaks
         state: present
+      tags:
+        - packages
 
     - name: Install VSCode
-      when: false
       # VSCode - START
       # wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
       # sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
@@ -131,11 +130,22 @@
             name: fish
             state: present
 
-        # STOPPED HERE
-        # The command hangs forever
-        - name: Install starship
-          ansible.builtin.shell:
-            cmd: curl -sS https://starship.rs/install.sh | sh
+        - name: Install sharship prompt
+          block:
+            - name: Download starship install script
+              ansible.builtin.get_url:
+                url: https://starship.rs/install.sh
+                dest: /tmp/starship_install.sh
+
+            - name: Make starship install script executable
+              ansible.builtin.file:
+                path: /tmp/starship_install.sh
+                mode: '+x'
+
+            - name: Run starship install script
+              become: true
+              ansible.builtin.shell:
+                cmd: /tmp/starship_install.sh --yes
 
         - name: Change shell to fish
           become: true
@@ -161,7 +171,6 @@
 
 
     - name: Setup Python
-      when: false
       block:
         - name: Check if pyenv is installed
           ansible.builtin.shell:
@@ -210,11 +219,6 @@
           ansible.builtin.shell:
             cmd: bash -lc "pipx install pipenv"
 
-
-
-
-
-
     - name: Install node
       block:
         - name: Check if node installed
@@ -242,6 +246,23 @@
               nvm install {{ node_version }}
               nvm use {{ nove_version }}
 
+    - name: Install gh
+      when: false
+      block:
+        - name: Import GPG Key
+          ansible.builtin.get_url:
+            url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+            dest: /etc/apt/trusted.gpg.d/
+
+        - name: Add ppa
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+            state: present
+
+        - name: Install
+          ansible.builtin.apt:
+            name: code
+            state: present
 
     # TODO: install docker
     # - name: Install Docker
@@ -275,27 +296,6 @@
         #     groups: docker
         #     append: true
 
-
-    - name: Install gh
-      when: false
-      block:
-        - name: Import GPG Key
-          ansible.builtin.get_url:
-            url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-            dest: /etc/apt/trusted.gpg.d/
-
-        - name: Add ppa
-          ansible.builtin.apt_repository:
-            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
-            state: present
-
-        - name: Install
-          ansible.builtin.apt:
-            name: code
-            state: present
-
-
-
     # Install ulauncher - START
     # commented out for now since pop_os may have launcher already
     # - name: Add ulauncher ppa
@@ -308,9 +308,7 @@
     #     state: present
     # Install ulauncher - END
 
-
     # sudo apt autoremove
-
 
     # LEFTOVERS
     # - name: Install DNF plugins core

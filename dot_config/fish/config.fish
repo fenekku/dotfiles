@@ -1,5 +1,9 @@
+# Commands to run in interactive sessions can go here
 if status is-interactive
-    # Commands to run in interactive sessions can go here
+    # starship prompt
+    starship init fish | source
+
+    # zellij
     eval (zellij setup --generate-auto-start fish | string collect)
 end
 
@@ -9,9 +13,6 @@ test -s "$HOME/.config/envman/load.fish"; and source "$HOME/.config/envman/load.
 
 # zoxide
 zoxide init fish | source
-
-# starship prompt
-starship init fish | source
 
 # pyenv
 set --export PYENV_ROOT $HOME/.pyenv
