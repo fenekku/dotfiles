@@ -1,0 +1,11 @@
+# setup test
+
+- name: "Pop_OS machine setup"
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  vars:
+    python_version: "3.12"
+    node_version: "20.11"  # TODO: make it so latest LTS installed
+    fish_path: /usr/bin/fish
+  tasks:

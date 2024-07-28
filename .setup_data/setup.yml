@@ -31,6 +31,8 @@
         name:
           # Development
           - build-essential
+          - libxml2-dev
+          - libxslt-dev
           - libssl-dev
           - zlib1g-dev
           - libbz2-dev
@@ -44,6 +46,7 @@
           - emacs-nox
           - liblzma-dev
           - git-core
+          - fonts-hack-ttf
           # Alternative package installer
           - gdebi-core
           - apt-transport-https
@@ -56,42 +59,22 @@
           - python3-gpg
           # Nice tools
           - zoxide
+          - pdftk
+          - imagemagick
           # Misc
           - gnome-tweaks
         state: present
       tags:
         - packages
 
-    - name: Install VSCode
-      # VSCode - START
-      # wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-      # sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-      # sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-      # rm -f packages.microsoft.gpg
-      block:
-        - name: Import Microsoft GPG Key
-          become: yes
-          ansible.builtin.get_url:
-            url: https://packages.microsoft.com/keys/microsoft.asc
-            dest: /etc/apt/trusted.gpg.d/
-            # TODO: add correct checksum
-            # checksum: sha256:bb42f0db45d46bab5f9ec619e1a47360b94c27142e57aa71f7050d08672309e0
-
-        - name: Add Visual Studio Code ppa
-          become: yes
-          ansible.builtin.apt_repository:
-            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
-            state: present
-
-        - name: Install VS Code
-          become: yes
-          ansible.builtin.apt:
-            name: code
-            state: present
-
     - name: Create folder structure
       block:
-        - name: dev folder
+        - name: ~/bin folder
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/bin"
+            state: directory
+
+        - name: ~/dev folder
           ansible.builtin.file:
             path: "{{ ansible_env.HOME }}/dev"
             state: directory
@@ -100,22 +83,80 @@
           ansible.builtin.file:
             path: "{{ ansible_env.HOME }}/Downloads/Packages"
             state: directory
+        - name: Set 'packages_dir' variable
+          ansible.builtin.set_fact:
+            packages_dir: "{{ ansible_env.HOME }}/Downloads/Packages"
 
-    - name: Install Synology Drive Client
+    - name: Install VSCode
       block:
-        - name: Download client
+        - name: Download VSCode deb
           ansible.builtin.get_url:
-            url: https://global.synologydownload.com/download/Utility/SynologyDriveClient/3.4.0-15724/Ubuntu/Installer/synology-drive-client-15724.x86_64.deb
-            dest: "{{ ansible_env.HOME }}/Downloads/Packages"
+            url: 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
+            dest: "{{ packages_dir }}/code.deb"
 
-        - name: Install client
+        - name: Install VSCode deb
+          become: yes
+          command:
+            cmd: apt install -y {{ packages_dir }}/code.deb
+
+        - name: Prefer official PPA over Pop_OS ppa
+          become: yes
+          blockinfile:
+            create: true
+            path: /etc/apt/preferences.d/vscode-settings
+            block: |
+              # Prefer vscode from the microsoft repo
+              Package: code
+              Pin: origin packages.microsoft.com
+              Pin-Priority: 1002
+
+    - name: Install mise
+      block:
+        - name: Import PUB Key
+          become: yes
+          ansible.builtin.get_url:
+            url: https://mise.jdx.dev/gpg-key.pub
+            dest: /etc/apt/keyrings/mise-archive-keyring
+
+        - name: GPG dearmor
+          become: yes
+          ansible.builtin.shell:
+            cmd: gpg --yes --dearmor < /etc/apt/keyrings/mise-archive-keyring > /etc/apt/keyrings/mise-archive-keyring.gpg
+
+        - name: Add ppa
+          become: true
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg] https://mise.jdx.dev/deb stable main"
+            state: present
+
+        - name: Install
           become: true
           ansible.builtin.apt:
-            deb: "{{ ansible_env.HOME }}/Downloads/Packages/synology-drive-client-15724.x86_64.deb"
+            name: mise
+            state: present
 
-        - name: Launch Synology Drive client reminder
-          ansible.builtin.debug:
-            msg: "Don't forget to launch Synology Drive at least once to set it up!"
+
+
+   - name: Install zellij
+     block:
+       - name: Download zellij prebuilt binary
+         ansible.builtin.get_url:
+           url: https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
+           dest: "{{ ansible_env.HOME }}/Downloads/Packages"
+
+       - name: Extract zellij
+         ansible.builtin.unarchive:
+           src: "{{ ansible_env.HOME }}/Downloads/Packages/zellij-x86_64-unknown-linux-musl.tar.gz"
+           dest: "{{ ansible_env.HOME }}/bin"
+           # extra_opts: [--strip-components=1]
+           creates: "{{ ansible_env.HOME }}/bin/zellij"
+
+       - name: Make zellij script executable
+         ansible.builtin.file:
+           path: "{{ ansible_env.HOME }}/bin/zellij"
+           mode: '+x'
+     tags:
+       - zellij
 
     - name: Setup fish
       block:
@@ -166,10 +207,6 @@
             cmd: curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
             executable: "{{ fish_path }}"
 
-
-    # TODO: install git-split-diffs
-
-
     - name: Setup Python
       block:
         - name: Check if pyenv is installed
@@ -219,6 +256,10 @@
           ansible.builtin.shell:
             cmd: bash -lc "pipx install pipenv"
 
+        - name: Install poetry
+          ansible.builtin.shell:
+            cmd: pipx install poetry
+
     - name: Install node
       block:
         - name: Check if node installed
@@ -246,22 +287,40 @@
               nvm install {{ node_version }}
               nvm use {{ nove_version }}
 
+    # - name: Install cargo
+    #   ansible.builtin.shell:
+    #     cmd: curl https://sh.rustup.rs -sSf | sh -s -- -y
+    #     warn: false
+
+    # - name: Install git-delta
+    #   ansible.builtin.command:
+    #     cmd: cargo install --force git-delta
+
     - name: Install gh
-      when: false
       block:
         - name: Import GPG Key
           ansible.builtin.get_url:
             url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-            dest: /etc/apt/trusted.gpg.d/
+            dest: /usr/share/keyrings/githubcli-archive-keyring.gpg
+
+        - name: Get architecture
+          ansible.builtin.command:
+            cmd: dpkg --print-architecture
+          register: architecture_out
+
+        - ansible.builtin.set_fact:
+            architecture: "{{ architecture_out.stdout }}"
 
         - name: Add ppa
+          become: true
           ansible.builtin.apt_repository:
-            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+            repo: "deb [arch={{ architecture }} signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
             state: present
 
         - name: Install
+          become: true
           ansible.builtin.apt:
-            name: code
+            name: gh
             state: present
 
     # TODO: install docker
@@ -349,96 +408,18 @@
     #     name: rtx
     #     state: present
 
-    # - name: Add Hashicorp Repo
-    #   ansible.builtin.yum_repository:
-    #     name: hashicorp
-    #     description: Hashicorp repo
-    #     baseurl: https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
-    #     gpgkey: https://rpm.releases.hashicorp.com/gpg
-    #     gpgcheck: true
-    #     enabled: true
+    - name: Install Synology Drive Client
+      block:
+        - name: Download client
+          ansible.builtin.get_url:
+            url: https://global.synologydownload.com/download/Utility/SynologyDriveClient/3.4.0-15724/Ubuntu/Installer/synology-drive-client-15724.x86_64.deb
+            dest: "{{ ansible_env.HOME }}/Downloads/Packages"
 
-    # - name: Install Terraform
-    #   ansible.builtin.dnf:
-    #     name: terraform
-    #     state: present
+        - name: Install client
+          become: true
+          ansible.builtin.apt:
+            deb: "{{ ansible_env.HOME }}/Downloads/Packages/synology-drive-client-15724.x86_64.deb"
 
-    # - name: Check if Pulumi is installed
-    #   ansible.builtin.command:
-    #     cmd: pulumi version
-    #   register: pulumi_installed
-    #   ignore_errors: true
-    #   changed_when: false
-
-    # - name: Download Pulumi SDK
-    #   ansible.builtin.get_url:
-    #     url: "https://get.pulumi.com/releases/sdk/pulumi-{{ pulumi_version }}-linux-x64.tar.gz"
-    #     dest: "/tmp/pulumi-{{ pulumi_version }}-linux-x64.tar.gz"
-    #     mode: "0644"
-    #   when: pulumi_installed is failed or pulumi_installed.stdout is not search(pulumi_version)
-
-    # - name: Extract Pulumi to /usr/local/bin
-    #   ansible.builtin.unarchive:
-    #     src: "/tmp/pulumi-{{ pulumi_version }}-linux-x64.tar.gz"
-    #     dest: /usr/local/bin
-    #     extra_opts: [--strip-components=1]
-    #     creates: /usr/local/bin/pulumi
-    #   when: pulumi_installed is failed or pulumi_installed.stdout is not search(pulumi_version)
-
-    # - name: Check if the targeted version of flyctl is installed
-    #   ansible.builtin.command: flyctl version
-    #   register: installed_flyctl_version
-    #   ignore_errors: true
-    #   changed_when: false
-
-    # - name: Download flyctl tar.gz
-    #   ansible.builtin.get_url:
-    #     url: "https://github.com/superfly/flyctl/releases/download/v{{ flyctl_version }}/flyctl_{{ flyctl_version }}_Linux_x86_64.tar.gz"
-    #     dest: "/tmp/flyctl_{{ flyctl_version }}_Linux_x86_64.tar.gz"
-    #     mode: "0644"
-    #   when: flyctl_version not in installed_flyctl_version.stdout
-
-    # - name: Extract flyctl to /usr/local/bin
-    #   ansible.builtin.unarchive:
-    #     src: "/tmp/flyctl_{{ flyctl_version }}_Linux_x86_64.tar.gz"
-    #     dest: "/usr/local/bin"
-    #     remote_src: true
-    #   when: flyctl_version not in installed_flyctl_version.stdout
-
-    # - name: Install Flatpak packages
-    #   community.general.flatpak:
-    #     name:
-    #       - com.obsproject.Studio
-    #       - org.videolan.VLC
-    #       - org.tenacityaudio.Tenacity
-    #       - md.obsidian.Obsidian
-    #       - org.gimp.GIMP
-    #       - rest.insomnia.Insomnia
-    #       - com.github.johnfactotum.Foliate
-    #       - com.jetbrains.PyCharm-Professional
-    #       - com.jetbrains.GoLand
-    #       - org.gnome.meld
-    #       - org.sqlitebrowser.sqlitebrowser
-    #     state: present
-
-    # - name: Ensure fonts directory
-    #   ansible.builtin.file:
-    #     path: "~{{ remote_regular_user }}/.fonts"
-    #     state: directory
-    #     mode: "0755"
-    #     owner: "{{ remote_regular_user }}"
-
-    # - name: Check if Jetbrains Mono exists
-    #   ansible.builtin.shell: "ls ~{{ remote_regular_user }}/.fonts/JetBrainsMonoNerd*FontMono*"
-    #   register: jetbrains_mono_exists
-    #   ignore_errors: true
-    #   changed_when: false
-
-    # - name: Download Jetbrains mono
-    #   when: jetbrains_mono_exists is failed
-    #   ansible.builtin.unarchive:
-    #     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip
-    #     dest: "~{{ remote_regular_user }}/.fonts/"
-    #     remote_src: true
-    #     mode: "0755"
-    #     owner: "{{ remote_regular_user }}"
+        - name: Launch Synology Drive client reminder
+          ansible.builtin.debug:
+            msg: "Don't forget to launch Synology Drive at least once to set it up!"

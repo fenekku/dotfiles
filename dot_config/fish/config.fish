@@ -1,3 +1,7 @@
+# local bin - has to be set first because
+# commands below depend on it being in the PATH to be found
+set --export PATH ~/bin $PATH
+
 # Commands to run in interactive sessions can go here
 if status is-interactive
     # starship prompt
@@ -5,6 +9,12 @@ if status is-interactive
 
     # zellij
     eval (zellij setup --generate-auto-start fish | string collect)
+end
+
+# rust
+if not contains "$HOME/.cargo/bin" $PATH
+    # Appengin path in case a system-installed rustc needs to be overridden
+    set -x PATH $PATH "$HOME/.cargo/bin"
 end
 
 # what is this?
@@ -22,8 +32,6 @@ pyenv init - | source
 # pipenv
 set --export PIPENV_VENV_IN_PROJECT 1
 
-# rust
-set --export PATH ~/.cargo/bin $PATH
 
 # Docker
 alias containers "docker ps --all --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}'"
@@ -35,6 +43,4 @@ alias dc docker-compose
 
 # pipx
 set --export PIPX_DEFAULT_PYTHON /home/guillaume/.pyenv/shims/python
-
-# local bin
-set --export PATH ~/bin $PATH
+set --export PATH ~/.local/bin $PATH

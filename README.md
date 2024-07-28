@@ -17,6 +17,7 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 - [ ] python still not set properly
 - [ ] test on other clean install
 - [ ] profiles
+- [ ] /etc/ImageMagick-6/policy.xml for policy.xml
 
 ## Workflow
 *Once on each computer*
