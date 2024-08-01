@@ -12,9 +12,11 @@ My [chezmoi](https://www.chezmoi.io/) compatible dotfiles.
 - [x] fish plugins
 - [x] drive client
 - [x] starship
-- [ ] zellij
-- [ ] git split diff
-- [ ] python still not set properly
+- [x] zellij
+- [x] mise
+- [x] node
+- [x] git split diffs
+- [ ] python via mise
 - [ ] test on other clean install
 - [ ] profiles
 - [ ] /etc/ImageMagick-6/policy.xml for policy.xml

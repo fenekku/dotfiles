@@ -11,6 +11,9 @@ if status is-interactive
     eval (zellij setup --generate-auto-start fish | string collect)
 end
 
+# mise
+fish_add_path ~/.local/share/mise/shims
+
 # rust
 if not contains "$HOME/.cargo/bin" $PATH
     # Appengin path in case a system-installed rustc needs to be overridden

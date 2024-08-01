@@ -278,9 +278,10 @@
     #     cmd: curl https://sh.rustup.rs -sSf | sh -s -- -y
     #     warn: false
 
-    # - name: Install git-delta
-    #   ansible.builtin.command:
-    #     cmd: cargo install --force git-delta
+    - name: Install git-split-diffs
+      ansible.builtin.shell:
+        cmd: npm install -g git-split-diffs
+        executable: "{{ fish_path }}"
 
     - name: Install gh
       block:
