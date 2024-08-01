@@ -13,7 +13,7 @@
   gather_facts: true
   vars:
     python_version: "3.12"
-    node_version: "20.11"  # TODO: make it so latest LTS installed
+    node_version: "20"  # Until 2026, then 24 or 26 LTS installed
     fish_path: /usr/bin/fish
   tasks:
     - name: Debug
@@ -134,8 +134,6 @@
           ansible.builtin.apt:
             name: mise
             state: present
-
-
 
    - name: Install zellij
      block:
@@ -260,7 +258,7 @@
           ansible.builtin.shell:
             cmd: pipx install poetry
 
-    - name: Install node
+    - name: Install node (and npm)
       block:
         - name: Check if node installed
           ignore_errors: true
@@ -269,23 +267,11 @@
             executable: "{{ fish_path }}"
           register: node_installed
 
-        - name: Check if nvm installed
-          ignore_errors: true
-          ansible.builtin.shell:
-            cmd: nvm --version
-          register: nvm_installed
-
-        - name: Install nvm
-          when: nvm_installed is failed
-          ansible.builtin.shell:
-            cmd: fisher install jorgebucaran/nvm.fish
-
         - name: Install Node {{ node_version }}
           when: node_installed is failed
           ansible.builtin.shell:
             cmd: |
-              nvm install {{ node_version }}
-              nvm use {{ nove_version }}
+              mise use --global node@{{ node_version }}
 
     # - name: Install cargo
     #   ansible.builtin.shell:
@@ -370,10 +356,6 @@
     # sudo apt autoremove
 
     # LEFTOVERS
-    # - name: Install DNF plugins core
-    #   ansible.builtin.dnf:
-    #     name: dnf-plugins-core
-    #     state: present
 
     # - name: Add Brave Browser Repo
     #   ansible.builtin.yum_repository:
@@ -392,20 +374,6 @@
     # - name: Install Brave Browser
     #   ansible.builtin.dnf:
     #     name: brave-browser
-    #     state: present
-
-    # - name: Add rtx config manager
-    #   ansible.builtin.yum_repository:
-    #     name: rtx
-    #     description: RTX Repo
-    #     baseurl: https://rtx.pub/rpm
-    #     gpgkey: https://rtx.pub/gpg-key.pub
-    #     gpgcheck: true
-    #     enabled: true
-
-    # - name: Install RTX
-    #   ansible.builtin.dnf:
-    #     name: rtx
     #     state: present
 
     - name: Install Synology Drive Client
